@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour
 {
+   public event EventHandler OnJump; 
    public static GameInput Instance { get; private set; }
    private PlayerInputActions playerInputActions;
    
@@ -15,6 +16,14 @@ public class GameInput : MonoBehaviour
       Instance = this;
       playerInputActions = new PlayerInputActions();
       playerInputActions.Player.Move.Enable();
+      playerInputActions.Player.Jump.Enable();
+
+      playerInputActions.Player.Jump.performed += JumpOnperformed;
+   }
+
+   private void JumpOnperformed(InputAction.CallbackContext obj)
+   {
+      OnJump?.Invoke(this, EventArgs.Empty);
    }
 
    public Vector2 GetInputVectorNormalized()
